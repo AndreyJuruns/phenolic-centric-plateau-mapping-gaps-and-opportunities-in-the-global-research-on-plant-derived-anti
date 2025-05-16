@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import plotly as px
 import plotly.graph_objects as go
 import numpy as np
 # Define layout como wide
@@ -1050,6 +1051,20 @@ fig.update_layout(
 
 # Exibe o gráfico no Streamlit
 st.plotly_chart(fig, use_container_width=True)
+
+with st.container():
+
+    st.title("📊 Compostos Bioativos e familias")
+
+    # Exibe a tabela
+    st.dataframe(df_cont_fam01)
+    # Botão de download
+    st.download_button(
+        label="⬇️ Baixar planilha CSV",
+        data=df_cont_fam01.to_csv(index=False).encode('utf-8'),
+        file_name='compostos_bioativos_familias.csv',
+        mime='text/csv',
+    )
 
 
 # cd "C:\Users\Andrey\Desktop\Artigo_Maio\StreamLit"
