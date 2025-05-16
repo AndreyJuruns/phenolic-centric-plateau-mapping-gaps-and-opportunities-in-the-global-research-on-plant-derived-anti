@@ -1,6 +1,8 @@
 import pandas as pd
 import streamlit as st
-
+import plotly as px
+import plotly.graph_objects as go
+import numpy as np
 # Define layout como wide
 st.set_page_config(
     layout="wide", page_title="Frequência de Compostos Bioativos"
@@ -25,6 +27,8 @@ agrupamento = {
     # variações de flavonoids
 
     "flavonoid": "flavonoids",
+    "hydroxyflavones": "flavonoids",
+    "hydroxyflavone": "flavonoids",
     "anthocyanins": "flavonoids",
     "flavonols": "flavonoids",
     "anthocyanin": "flavonoids",
@@ -338,59 +342,59 @@ agrupamento = {
     "sesquiterpens": "sesquiterpenes",
 
     # variações de compounds
-    "catechin": "compounds",
-    "epicatechin": "compounds",
-    "thymoquinone": "compounds",
-    "epigallocatechin": "compounds",
-    "gallocatechin": "compounds",
-    "galantamine": "compounds",
-    "galanthamine": "compounds",
-    "amentoflavone": "compounds",
-    "ellagitannin": "compounds",
-    "methoxyflavone": "compounds",
-    "octadecenamide": "compounds",
-    "capsaicin": "compounds",
-    "dithymoquinone": "compounds",
-    "docosenamide": "compounds",
-    "thymohydroquinone": "compounds",
-    "piperamide": "compounds",
-    "isobavachalcone": "compounds",
-    "licochalcone": "compounds",
-    "morelloflavone": "compounds",
-    "sophoraflavanone": "compounds",
-    "dihydrocapsaicin": "compounds",
-    "caffeoyltyramine": "compounds",
-    "columbamine": "compounds",
-    "gallotannin": "compounds",
-    "catechine": "compounds",
-    "theaflavin": "compounds",
-    "agathisflavone": "compounds",
-    "methylgallocatechin": "compounds",
-    "neobavaisoflavone": "compounds",
-    "abyssinoflavanone": "compounds",
-    "alangiflavoside": "compounds",
-    "allanxanthone": "compounds",
-    "artobiloxanthone": "compounds",
-    "atalantoflavone": "compounds",
-    "aurantiamide": "compounds",
-    "avenanthramide": "compounds",
-    "avicequinone": "compounds",
-    "brachyamide": "compounds",
-    "brachystamide": "compounds",
-    "brasilixanthone": "compounds",
-    "budmunchiamines": "compounds",
-    "clausamine": "compounds",
-    "cupressoflavone": "compounds",
-    "cupressuflavone": "compounds",
-    "dehydroabietylamine": "compounds",
-    "demethyllycoramine": "compounds",
-    "deoxybryaquinone": "compounds",
-    "desmoflavanone": "compounds",
-    "dihydrocaffeoyltyramine": "compounds",
-    "dihydrorescinnamine": "compounds",
-    "dodecatetraenamide": "compounds",
-    "elastixanthone": "compounds",
-
+    "catechin": "isolated compounds",
+    "epicatechin": "isolated compounds",
+    "thymoquinone": "isolated compounds",
+    "epigallocatechin": "isolated compounds",
+    "gallocatechin": "isolated compounds",
+    "galantamine": "isolated compounds",
+    "galanthamine": "isolated compounds",
+    "amentoflavone": "isolated compounds",
+    "ellagitannin": "isolated compounds",
+    "methoxyflavone": "isolated compounds",
+    "octadecenamide": "isolated compounds",
+    "capsaicin": "isolated compounds",
+    "dithymoquinone": "isolated compounds",
+    "docosenamide": "isolated compounds",
+    "thymohydroquinone": "isolated compounds",
+    "piperamide": "isolated compounds",
+    "isobavachalcone": "isolated compounds",
+    "licochalcone": "isolated compounds",
+    "morelloflavone": "isolated compounds",
+    "sophoraflavanone": "isolated compounds",
+    "dihydrocapsaicin": "isolated compounds",
+    "caffeoyltyramine": "isolated compounds",
+    "columbamine": "isolated compounds",
+    "gallotannin": "isolated compounds",
+    "catechine": "isolated compounds",
+    "theaflavin": "isolated compounds",
+    "agathisflavone": "isolated compounds",
+    "methylgallocatechin": "isolated compounds",
+    "neobavaisoflavone": "isolated compounds",
+    "abyssinoflavanone": "isolated compounds",
+    "alangiflavoside": "isolated compounds",
+    "allanxanthone": "isolated compounds",
+    "artobiloxanthone": "isolated compounds",
+    "atalantoflavone": "isolated compounds",
+    "aurantiamide": "isolated compounds",
+    "avenanthramide": "isolated compounds",
+    "avicequinone": "isolated compounds",
+    "brachyamide": "isolated compounds",
+    "brachystamide": "isolated compounds",
+    "brasilixanthone": "isolated compounds",
+    "budmunchiamines": "isolated compounds",
+    "clausamine": "isolated compounds",
+    "cupressoflavone": "isolated compounds",
+    "cupressuflavone": "isolated compounds",
+    "dehydroabietylamine": "isolated compounds",
+    "demethyllycoramine": "isolated compounds",
+    "deoxybryaquinone": "isolated compounds",
+    "desmoflavanone": "isolated compounds",
+    "dihydrocaffeoyltyramine": "isolated compounds",
+    "dihydrorescinnamine": "isolated compounds",
+    "dodecatetraenamide": "isolated compounds",
+    "elastixanthone": "isolated compounds",
+    "capsaicinoids": "isolated isolated compounds",
     # variações de ruidos
 
     "essential oils": "noise",
@@ -782,7 +786,10 @@ agrupamento = {
     "ylphenol": "noise",
     "ylphenols": "noise",
     "flavor": "noise",
-    "flavors": "noise"
+    "flavors": "noise",
+
+    "cardiotonic glycosides": "noise",
+    "piperamide": "noise",
 }
 
 # Cria nova coluna com os termos padronizados
@@ -971,6 +978,79 @@ with st.container():
         st.line_chart(df_countsP, use_container_width=True)
     elif grafico_principal == "Barra":
         st.bar_chart(df_countsP, use_container_width=True)
+
+# Ajustes
+df_cont_bacte = pd.read_csv('contagem_fam_bio_bacte_gram.csv')
+df_cont_fam01 = pd.read_csv('contagem_fam_bio_NER.csv')
+df_cont_fam02 = pd.read_csv('contagem_fam_bio_textgen.csv')
+
+df_cont_fam01 = df_cont_fam01[df_cont_fam01['family'].notna()]
+df_cont_fam02 = df_cont_fam02[df_cont_fam02['family2'].notna()]
+
+# Somar somente as colunas numéricas (os compostos)
+df_cont_fam01['total_compostos'] = df_cont_fam01.select_dtypes(
+    include='number').sum(axis=1)
+df_cont_fam02['total_compostos'] = df_cont_fam02.select_dtypes(
+    include='number').sum(axis=1)
+df_cont_bacte['total_compostos'] = df_cont_bacte.select_dtypes(
+    include='number').sum(axis=1)
+
+# Remover a coluna 'noise' se existir
+df_cont_fam01 = df_cont_fam01.drop(columns=['noise'])
+df_cont_fam02 = df_cont_fam02.drop(columns=['noise'])
+df_cont_bacte = df_cont_bacte.drop(columns=['noise'])
+df_cont_fam01.columns
+
+df_cont_fam01 = df_cont_fam01.drop(columns=['Unnamed: 12'])
+
+df_cont_fam01 = df_cont_fam01.sort_values(
+    by='total_compostos', ascending=False)
+df_cont_fam02 = df_cont_fam02.sort_values(
+    by='total_compostos', ascending=False)
+df_cont_bacte = df_cont_bacte.sort_values(
+    by='total_compostos', ascending=False)
+
+
+# Supondo que você já tenha o DataFrame df_cont_fam01
+df_heat = df_cont_fam01.set_index('family')
+df_heat = df_heat.select_dtypes(include='number')  # Apenas dados numéricos
+
+# Seleção interativa de quantidade de compostos
+
+# Seleciona as top_n colunas (compostos) com base na soma total
+top_columns = df_heat.sum().sort_values(ascending=False).head(top_n).index
+df_filtered = df_heat[top_columns]
+
+zmin = df_filtered.values.min()
+zmax = np.percentile(df_filtered.values, 95)
+
+# Criação do heatmap com Plotly
+fig = go.Figure(data=go.Heatmap(
+    z=df_filtered.values,
+    x=df_filtered.columns,
+    y=df_filtered.index,
+    colorscale=[
+        [0.0, 'rgba(255,255,255,0)'],  # zmin: totalmente transparente
+        [0.05, 'rgb(237,248,233)'],
+        [0.25, 'rgb(186,228,179)'],
+        [0.5, 'rgb(116,196,118)'],
+        [0.75, 'rgb(49,163,84)'],
+        [1.0, 'rgb(0,109,44)']
+    ],
+    zmin=zmin,
+    zmax=zmax
+))
+
+fig.update_layout(
+    title='Heatmap Interativo dos Compostos',
+    xaxis_nticks=top_n,
+    yaxis_nticks=top_n,
+    height=1000
+
+)
+
+# Exibe o gráfico no Streamlit
+st.plotly_chart(fig, use_container_width=True)
 
 
 # cd "C:\Users\Andrey\Desktop\Artigo_Maio\StreamLit"
