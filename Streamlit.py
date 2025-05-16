@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-import plotly as px
 import plotly.graph_objects as go
 import numpy as np
 # Define layout como wide
