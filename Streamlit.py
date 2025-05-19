@@ -818,6 +818,7 @@ df_countsP = (
     .sum()
     .sort_values(by="count", ascending=False)
 )
+
 df_contagem = df_contagem[df_contagem['Termo Agrupado'] != 'noise']
 df_countsN = df_countsN[df_countsN['Termo Agrupado'] != 'noise']
 df_countsP = df_countsP[df_countsP['Termo Agrupado'] != 'noise']
@@ -868,18 +869,6 @@ with st.container():
     elif grafico_principal == "Barra":
         st.bar_chart(top_n_data, use_container_width=True)
 
-# Container: comparação
-with st.container():
-    st.subheader("📊 Comparação Lado a Lado")
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.write("🔵 Gráfico de Barras")
-        st.bar_chart(top_n_data, use_container_width=True)
-
-    with col2:
-        st.write("🔴 Gráfico de Linhas")
-        st.line_chart(top_n_data, use_container_width=True)
 
 # %%
 
@@ -916,68 +905,61 @@ with st.container():
     elif grafico_principal == "Barra":
         st.bar_chart(top_n_data, use_container_width=True)
 
-# Container: comparação
-with st.container():
-    st.subheader("📊 Comparação Lado a Lado")
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.write("🔵 Gráfico de Barras")
-        st.bar_chart(top_n_data, use_container_width=True)
-
-    with col2:
-        st.write("🔴 Gráfico de Linhas")
-        st.line_chart(top_n_data, use_container_width=True)
-
 
 df_countsN = df_countsN.head(top_n).set_index('Termo Agrupado')
 df_countsP = df_countsP.head(top_n).set_index('Termo Agrupado')
 
 
 with st.container():
+    st.subheader("📊 Comparação Lado a Lado")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("🔴 Frequência Gram Negative")
 
-    st.title("📊 Frequência Gram Negative")
+        # Exibe a tabela
+        st.dataframe(df_countsN)
+        # Botão de download
+        st.download_button(
+            label="⬇️ Baixar planilha CSV",
+            data=df_countsN.to_csv(index=False).encode('utf-8'),
+            file_name='frequência_bactérias_neg.csv',
+            mime='text/csv',
+        )
+    with col2:
+        st.write("🔵 Frequência Gram Positive")
 
-    # Exibe a tabela
-    st.dataframe(df_countsN)
-    # Botão de download
-    st.download_button(
-        label="⬇️ Baixar planilha CSV",
-        data=df_countsN.to_csv(index=False).encode('utf-8'),
-        file_name='frequência_bactérias_neg.csv',
-        mime='text/csv',
-    )
-
-    st.title("📊 Frequência Gram Positive")
-
-    # Exibe a tabela
-    st.dataframe(df_countsP)
-    # Botão de download
-    st.download_button(
-        label="⬇️ Baixar planilha CSV",
-        data=df_countsP.to_csv(index=False).encode('utf-8'),
-        file_name='frequência_bactérias_pos.csv',
-        mime='text/csv',
-    )
+        # Exibe a tabela
+        st.dataframe(df_countsP)
+     # Botão de download
+        st.download_button(
+            label="⬇️ Baixar planilha CSV",
+            data=df_countsP.to_csv(index=False).encode('utf-8'),
+            file_name='frequência_bactérias_pos.csv',
+            mime='text/csv',
+        )
 
 
 with st.container():
-    st.subheader(f"Gram Negative")
+    st.subheader("📊 Comparação Lado a Lado")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("🔴Gráfico de Negative")
 
-    if grafico_principal == "Área":
-        st.area_chart(df_countsN, use_container_width=True)
-    elif grafico_principal == "Linha":
-        st.line_chart(df_countsN, use_container_width=True)
-    elif grafico_principal == "Barra":
-        st.bar_chart(df_countsN, use_container_width=True)
+        if grafico_principal == "Área":
+            st.area_chart(df_countsN, use_container_width=True)
+        elif grafico_principal == "Linha":
+            st.line_chart(df_countsN, use_container_width=True)
+        elif grafico_principal == "Barra":
+            st.bar_chart(df_countsN, use_container_width=True)
+    with col2:
+        st.write("🔵 Gráfico de Positive")
 
-    st.subheader(f"Gram Positive")
-    if grafico_principal == "Área":
-        st.area_chart(df_countsP, use_container_width=True)
-    elif grafico_principal == "Linha":
-        st.line_chart(df_countsP, use_container_width=True)
-    elif grafico_principal == "Barra":
-        st.bar_chart(df_countsP, use_container_width=True)
+        if grafico_principal == "Área":
+            st.area_chart(df_countsP, use_container_width=True)
+        elif grafico_principal == "Linha":
+            st.line_chart(df_countsP, use_container_width=True)
+        elif grafico_principal == "Barra":
+            st.bar_chart(df_countsP, use_container_width=True)
 
 # Ajustes
 
@@ -1000,7 +982,7 @@ df_cont_bacte['total_compostos'] = df_cont_bacte.select_dtypes(
 df_cont_fam01 = df_cont_fam01.drop(columns=['noise'])
 df_cont_fam02 = df_cont_fam02.drop(columns=['noise'])
 df_cont_bacte = df_cont_bacte.drop(columns=['noise'])
-df_cont_fam01.columns
+
 
 df_cont_fam01 = df_cont_fam01.drop(columns=['Unnamed: 12'])
 
@@ -1079,6 +1061,9 @@ top_columns = df_heat.sum().sort_values(ascending=False).head(top_n).index
 df_filtered = df_heat[top_columns]
 # Criação do heatmap com Plotly fam_02
 
+zmin = df_filtered.values.min()
+zmax = np.percentile(df_filtered.values, 95)
+
 fig = go.Figure(data=go.Heatmap(
     z=df_filtered.values,
     x=df_filtered.columns,
@@ -1130,6 +1115,8 @@ df_heat = df_heat.select_dtypes(include='number')  # Apenas dados numéricos
 top_columns = df_heat.sum().sort_values(ascending=False).head(top_n).index
 df_filtered = df_heat[top_columns]
 # Criação do heatmap com Plotly fam_02
+zmin = df_filtered.values.min()
+zmax = np.percentile(df_filtered.values, 95)
 
 sort_option = st.selectbox(
     "Ordenar bactérias por:",
