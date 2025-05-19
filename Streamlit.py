@@ -1024,7 +1024,7 @@ else:
         yaxis_title='Frequência',
         barmode='group',
         xaxis_tickangle=-45,
-        height=600
+        height=800
     )
 
     # Exibe no Streamlit
