@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-import plotly as px
 import plotly.graph_objects as go
 import numpy as np
 # Define layout como wide
@@ -960,6 +959,45 @@ with st.container():
             st.line_chart(df_countsP, use_container_width=True)
         elif grafico_principal == "Barra":
             st.bar_chart(df_countsP, use_container_width=True)
+
+# Suponha que df_countsN e df_countsP já estejam definidos
+df_countsN.columns = df_countsN.columns.str.strip()
+df_countsP.columns = df_countsP.columns.str.strip()
+
+df_countsN = df_countsN.reset_index()
+df_countsP = df_countsP.reset_index()
+# Renomeia colunas para facilitar o merge
+dfN = df_countsN.rename(
+    columns={'Termo Agrupado': 'termo', 'count': 'negativo'})
+dfP = df_countsP.rename(
+    columns={'Termo Agrupado': 'termo', 'count': 'positivo'})
+
+
+# Junta os dois por "termo", preenchendo ausências com 0
+df_merged = pd.merge(dfN, dfP, on='termo', how='outer').fillna(0)
+
+# Ordena pelo total para melhor visualização (opcional)
+df_merged['total'] = df_merged['negativo'] + df_merged['positivo']
+df_merged = df_merged.sort_values(by='total', ascending=False)
+
+# Gráfico de barras lado a lado com Plotly
+fig = go.Figure(data=[
+    go.Bar(name='Gram Negative',
+           x=df_merged['termo'], y=df_merged['negativo']),
+    go.Bar(name='Gram Positive', x=df_merged['termo'], y=df_merged['positivo'])
+])
+
+fig.update_layout(
+    title='📊 Frequência por Termo (Gram + / -)',
+    xaxis_title='Termo',
+    yaxis_title='Frequência',
+    barmode='group',
+    xaxis_tickangle=-45,
+    height=500
+)
+
+# Exibe no Streamlit
+st.plotly_chart(fig, use_container_width=True)
 
 # Ajustes
 
