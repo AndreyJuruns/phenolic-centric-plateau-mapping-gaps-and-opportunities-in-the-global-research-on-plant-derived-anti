@@ -13,8 +13,6 @@ st.set_page_config(
 
 # Dicionário com usuários e senhas (em produção, use hashing!)
 USERS = {
-    "admin": "123",
-    "usuario": "1234",
     "Carlos": "Carollo Alexandre"
 }
 
