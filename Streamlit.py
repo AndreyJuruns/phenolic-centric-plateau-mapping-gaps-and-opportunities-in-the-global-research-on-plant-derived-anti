@@ -980,6 +980,7 @@ with st.container():
         st.bar_chart(df_countsP, use_container_width=True)
 
 # Ajustes
+
 df_cont_bacte = pd.read_csv('contagem_fam_bio_bacte_gram.csv')
 df_cont_fam01 = pd.read_csv('contagem_fam_bio_NER.csv')
 df_cont_fam02 = pd.read_csv('contagem_fam_bio_textgen.csv')
@@ -1010,7 +1011,7 @@ df_cont_fam02 = df_cont_fam02.sort_values(
 df_cont_bacte = df_cont_bacte.sort_values(
     by='total_compostos', ascending=False)
 
-
+# _______________________________________________________________________________________
 # Supondo que você já tenha o DataFrame df_cont_fam01
 df_heat = df_cont_fam01.set_index('family')
 df_heat = df_heat.select_dtypes(include='number')  # Apenas dados numéricos
@@ -1024,11 +1025,132 @@ df_filtered = df_heat[top_columns]
 zmin = df_filtered.values.min()
 zmax = np.percentile(df_filtered.values, 95)
 
-# Criação do heatmap com Plotly
+# Criação do heatmap com Plotly fam_01
 fig = go.Figure(data=go.Heatmap(
     z=df_filtered.values,
     x=df_filtered.columns,
     y=df_filtered.index,
+    colorscale=[
+        [0.0, 'rgba(255,255,255,0)'],  # zmin: totalmente transparente
+        [0.05, 'rgb(237,248,233)'],
+        [0.25, 'rgb(186,228,179)'],
+        [0.5, 'rgb(116,196,118)'],
+        [0.75, 'rgb(49,163,84)'],
+        [1.0, 'rgb(0,109,44)']
+    ],
+    zmin=zmin,
+    zmax=zmax
+))
+
+fig.update_layout(
+    title='Heatmap Interativo dos Compostos NER Model',
+    xaxis_nticks=top_n,
+    yaxis_nticks=top_n,
+    height=1000
+
+)
+
+# Exibe o gráfico no Streamlit
+st.plotly_chart(fig, use_container_width=True)
+
+with st.container():
+
+    st.title("📊 Compostos Bioativos e familias")
+
+    # Exibe a tabela
+    st.dataframe(df_cont_fam01)
+    # Botão de download
+    st.download_button(
+        label="⬇️ Baixar planilha CSV",
+        data=df_cont_fam01.to_csv(index=False).encode('utf-8'),
+        file_name='compostos_bioativos_familiasNER_Model.csv',
+        mime='text/csv',
+    )
+
+# _______________________________________________________________________________________
+# Supondo que você já tenha o DataFrame df_cont_fam01
+df_heat = df_cont_fam02.set_index('family2')
+df_heat = df_heat.select_dtypes(include='number')  # Apenas dados numéricos
+
+# Seleção interativa de quantidade de compostos
+
+# Seleciona as top_n colunas (compostos) com base na soma total
+top_columns = df_heat.sum().sort_values(ascending=False).head(top_n).index
+df_filtered = df_heat[top_columns]
+# Criação do heatmap com Plotly fam_02
+
+fig = go.Figure(data=go.Heatmap(
+    z=df_filtered.values,
+    x=df_filtered.columns,
+    y=df_filtered.index,
+    colorscale=[
+        [0.0, 'rgba(255,255,255,0)'],  # zmin: totalmente transparente
+        [0.05, 'rgb(237,248,233)'],
+        [0.25, 'rgb(186,228,179)'],
+        [0.5, 'rgb(116,196,118)'],
+        [0.75, 'rgb(49,163,84)'],
+        [1.0, 'rgb(0,109,44)']
+    ],
+    zmin=zmin,
+    zmax=zmax
+))
+
+fig.update_layout(
+    title='Heatmap Interativo dos Compostos TEXT_GEN Model',
+    xaxis_nticks=top_n,
+    yaxis_nticks=top_n,
+    height=1000
+
+)
+
+# Exibe o gráfico no Streamlit
+st.plotly_chart(fig, use_container_width=True)
+
+with st.container():
+
+    st.title("📊 Compostos Bioativos e familias")
+
+    # Exibe a tabela
+    st.dataframe(df_cont_fam02)
+    # Botão de download
+    st.download_button(
+        label="⬇️ Baixar planilha CSV",
+        data=df_cont_fam02.to_csv(index=False).encode('utf-8'),
+        file_name='compostos_bioativos_familiasTEXT_GEN Model.csv',
+        mime='text/csv',
+    )
+# _______________________________________________________________________________________
+# Supondo que você já tenha o DataFrame df_cont_fam01
+df_heat = df_cont_bacte.set_index(['Bacteria', 'gram'])
+df_heat = df_heat.select_dtypes(include='number')  # Apenas dados numéricos
+
+# Seleção interativa de quantidade de compostos
+
+# Seleciona as top_n colunas (compostos) com base na soma total
+top_columns = df_heat.sum().sort_values(ascending=False).head(top_n).index
+df_filtered = df_heat[top_columns]
+# Criação do heatmap com Plotly fam_02
+
+sort_option = st.selectbox(
+    "Ordenar bactérias por:",
+    options=["Total de compostos",
+             "Gram positivo primeiro", "Gram negativo primeiro"]
+)
+
+# Lógica para ordenar
+if sort_option == "Total de compostos":
+    df_filtered = df_filtered.loc[df_filtered.sum(
+        axis=1).sort_values(ascending=False).index]
+elif sort_option == "Gram positivo primeiro":
+    df_filtered = df_filtered.sort_index(level='gram', ascending=False)
+elif sort_option == "Gram negativo primeiro":
+    df_filtered = df_filtered.sort_index(level='gram', ascending=True)
+
+# Criação do heatmap com Plotly fam01
+fig = go.Figure(data=go.Heatmap(
+    z=df_filtered.values,
+    x=df_filtered.columns,
+    y=[f'{idx[0]} ({idx[1]})' for idx in df_filtered.index],
     colorscale=[
         [0.0, 'rgba(255,255,255,0)'],  # zmin: totalmente transparente
         [0.05, 'rgb(237,248,233)'],
@@ -1057,15 +1179,14 @@ with st.container():
     st.title("📊 Compostos Bioativos e familias")
 
     # Exibe a tabela
-    st.dataframe(df_cont_fam01)
+    st.dataframe(df_cont_bacte)
     # Botão de download
     st.download_button(
         label="⬇️ Baixar planilha CSV",
-        data=df_cont_fam01.to_csv(index=False).encode('utf-8'),
+        data=df_cont_bacte.to_csv(index=False).encode('utf-8'),
         file_name='compostos_bioativos_familias.csv',
         mime='text/csv',
     )
-
 
 # cd "C:\Users\Andrey\Desktop\Artigo_Maio\StreamLit"
 # streamlit run Streamlit.py
