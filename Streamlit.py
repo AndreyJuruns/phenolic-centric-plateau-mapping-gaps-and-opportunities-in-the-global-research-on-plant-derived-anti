@@ -44,7 +44,7 @@ else:
 
     # Carrega os dados
     df_banco = pd.read_csv(
-        'df_bert_bio_bac_gram_01_fam_TGEN02_FUNG_Biosafety01.csv')
+        'df_bert_bio_bac_gram_01_fam_TGEN02_FUNG_Biosafety02.csv')
     df_contagem = pd.read_csv('contagem_termos.csv')
     df_countsN = pd.read_csv('contagemN.csv')
     df_countsP = pd.read_csv('contagemP.csv')
