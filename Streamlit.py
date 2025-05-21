@@ -13,14 +13,15 @@ st.set_page_config(
 
 # Dicionário com usuários e senhas (em produção, use hashing!)
 USERS = {
-    "Carlos": "Carollo Alexandre"
+    "Carlos": "Carollo Alexandre",
+    "": ""
 }
 
 # Verifica se o usuário já está logado
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
-# Tela de login
+# Tela de loginS
 if not st.session_state.logged_in:
     st.title("🔐 Login")
     username = st.text_input("Usuário")
@@ -42,6 +43,8 @@ else:
     st.write("🎉 Este é o conteúdo da aplicação após login.")
 
     # Carrega os dados
+    df_banco = pd.read_csv(
+        'df_bert_bio_bac_gram_01_fam_TGEN02_FUNG_Biosafety01.csv')
     df_contagem = pd.read_csv('contagem_termos.csv')
     df_countsN = pd.read_csv('contagemN.csv')
     df_countsP = pd.read_csv('contagemP.csv')
@@ -877,6 +880,22 @@ else:
     # ----- CONTEÚDO PRINCIPAL -----
     with st.container():
 
+        st.title("📊 TABELA GERAL")
+
+        # Exibe a tabela
+        st.dataframe(df_banco)
+        # Botão de download
+        st.download_button(
+            label="⬇️ Baixar planilha CSV",
+            data=df_banco.to_csv(index=False).encode('utf-8'),
+            file_name='bancod_de_dados.csv',
+            mime='text/csv',
+        )
+
+    # ----- CONTEÚDO PRINCIPAL -----
+
+    with st.container():
+
         st.title("📊 Frequência de Compostos Bioativos")
 
         # Exibe a tabela
@@ -903,11 +922,11 @@ else:
         elif grafico_principal == "Barra":
             st.bar_chart(top_n_data, use_container_width=True)
 
-    # %%
+# ____________________________________________________________________________________
 
     df_contagem_02 = pd.read_csv('contagem_termos_bacte.csv')
 
-    # ----- CONTEÚDO PRINCIPAL -----
+    # ----- CONTEÚDO PRINCIPAL BACTERIAS -----
     with st.container():
 
         st.title("📊 Frequência de Bactérias")
@@ -925,9 +944,9 @@ else:
     # Filtra os dados
     top_n_data = df_contagem_02.head(top_n).set_index('Termo')
 
-    # Container: gráfico principal
+    # Container: gráfico principal de Bactérias
     with st.container():
-        st.subheader(f"Gráfico Principal")
+        st.subheader(f"Gráfico Bactérias")
 
         if grafico_principal == "Área":
             st.area_chart(top_n_data, use_container_width=True)
@@ -935,7 +954,41 @@ else:
             st.line_chart(top_n_data, use_container_width=True)
         elif grafico_principal == "Barra":
             st.bar_chart(top_n_data, use_container_width=True)
+# ____________________________________________________________________________________
+# ____________________________________________________________________________________
 
+    df_contagem_03 = pd.read_csv('contagem_termos_fung.csv')
+
+    # ----- CONTEÚDO PRINCIPAL FUNGOS -----
+    with st.container():
+
+        st.title("📊 Frequência de Fungos")
+
+        # Exibe a tabela
+        st.dataframe(df_contagem_03)
+        # Botão de download
+        st.download_button(
+            label="⬇️ Baixar planilha CSV",
+            data=df_contagem_03.to_csv(index=False).encode('utf-8'),
+            file_name='frequência_Fungos.csv',
+            mime='text/csv',
+        )
+
+    # Filtra os dados
+    top_n_data = df_contagem_03.head(top_n).set_index('Termo')
+
+    # Container: gráfico principal de Fungos
+    with st.container():
+        st.subheader(f"Gráfico Fungos")
+
+        if grafico_principal == "Área":
+            st.area_chart(top_n_data, use_container_width=True)
+        elif grafico_principal == "Linha":
+            st.line_chart(top_n_data, use_container_width=True)
+        elif grafico_principal == "Barra":
+            st.bar_chart(top_n_data, use_container_width=True)
+# ____________________________________________________________________________________
+# ____________________________________________________________________________________
     df_countsN = df_countsN.head(top_n).set_index('Termo Agrupado')
     df_countsP = df_countsP.head(top_n).set_index('Termo Agrupado')
 
@@ -990,6 +1043,7 @@ else:
                 st.bar_chart(df_countsP, use_container_width=True)
 
     # Suponha que df_countsN e df_countsP já estejam definidos
+
     df_countsN.columns = df_countsN.columns.str.strip()
     df_countsP.columns = df_countsP.columns.str.strip()
 
@@ -1022,7 +1076,7 @@ else:
         yaxis_title='Frequência',
         barmode='group',
         xaxis_tickangle=-45,
-        height=800
+        height=500
     )
 
     # Exibe no Streamlit
@@ -1033,6 +1087,7 @@ else:
     df_cont_bacte = pd.read_csv('contagem_fam_bio_bacte_gram.csv')
     df_cont_fam01 = pd.read_csv('contagem_fam_bio_NER.csv')
     df_cont_fam02 = pd.read_csv('contagem_fam_bio_textgen.csv')
+    df_cont_fung = pd.read_csv('contagem_fam_bio_fung_bios.csv')
 
     df_cont_fam01 = df_cont_fam01[df_cont_fam01['family'].notna()]
     df_cont_fam02 = df_cont_fam02[df_cont_fam02['family2'].notna()]
@@ -1044,12 +1099,14 @@ else:
         include='number').sum(axis=1)
     df_cont_bacte['total_compostos'] = df_cont_bacte.select_dtypes(
         include='number').sum(axis=1)
+    df_cont_fung['total_compostos'] = df_cont_fung.select_dtypes(
+        include='number').sum(axis=1)
 
     # Remover a coluna 'noise' se existir
     df_cont_fam01 = df_cont_fam01.drop(columns=['noise'])
     df_cont_fam02 = df_cont_fam02.drop(columns=['noise'])
     df_cont_bacte = df_cont_bacte.drop(columns=['noise'])
-
+    df_cont_fung = df_cont_fung.drop(columns=['noise'])
     df_cont_fam01 = df_cont_fam01.drop(columns=['Unnamed: 12'])
 
     df_cont_fam01 = df_cont_fam01.sort_values(
@@ -1058,7 +1115,8 @@ else:
         by='total_compostos', ascending=False)
     df_cont_bacte = df_cont_bacte.sort_values(
         by='total_compostos', ascending=False)
-
+    df_cont_fung = df_cont_fung.sort_values(
+        by='total_compostos', ascending=False)
     # _______________________________________________________________________________________
     # Supondo que você já tenha o DataFrame df_cont_fam01
     df_heat = df_cont_fam01.set_index('family')
@@ -1179,25 +1237,99 @@ else:
 
     # Seleciona as top_n colunas (compostos) com base na soma total
     top_columns = df_heat.sum().sort_values(ascending=False).head(top_n).index
-    df_filtered = df_heat[top_columns]
+    df_filtered_bac = df_heat[top_columns]
     # Criação do heatmap com Plotly fam_02
-    zmin = df_filtered.values.min()
-    zmax = np.percentile(df_filtered.values, 95)
+    zmin = df_filtered_bac.values.min()
+    zmax = np.percentile(df_filtered_bac.values, 95)
 
     sort_option = st.selectbox(
         "Ordenar bactérias por:",
-        options=["Total de compostos",
+        options=["Total de compostos Bacterias",
                  "Gram positivo primeiro", "Gram negativo primeiro"]
     )
 
     # Lógica para ordenar
     if sort_option == "Total de compostos":
-        df_filtered = df_filtered.loc[df_filtered.sum(
+        df_filtered_bac = df_filtered_bac.loc[df_filtered_bac.sum(
             axis=1).sort_values(ascending=False).index]
     elif sort_option == "Gram positivo primeiro":
-        df_filtered = df_filtered.sort_index(level='gram', ascending=False)
+        df_filtered_bac = df_filtered_bac.sort_index(
+            level='gram', ascending=False)
     elif sort_option == "Gram negativo primeiro":
-        df_filtered = df_filtered.sort_index(level='gram', ascending=True)
+        df_filtered_bac = df_filtered_bac.sort_index(
+            level='gram', ascending=True)
+
+    # Criação do heatmap com Plotly fam01
+    fig = go.Figure(data=go.Heatmap(
+        z=df_filtered_bac.values,
+        x=df_filtered_bac.columns,
+        y=[f'{idx[0]} ({idx[1]})' for idx in df_filtered_bac.index],
+        colorscale=[
+            [0.0, 'rgba(255,255,255,0)'],  # zmin: totalmente transparente
+            [0.05, 'rgb(237,248,233)'],
+            [0.25, 'rgb(186,228,179)'],
+            [0.5, 'rgb(116,196,118)'],
+            [0.75, 'rgb(49,163,84)'],
+            [1.0, 'rgb(0,109,44)']
+        ],
+        zmin=zmin,
+        zmax=zmax
+    ))
+
+    fig.update_layout(
+        title='Heatmap Interativo dos Compostos',
+        xaxis_nticks=top_n,
+        yaxis_nticks=top_n,
+        height=1000
+
+    )
+
+    # Exibe o gráfico no Streamlit
+    st.plotly_chart(fig, use_container_width=True)
+
+    with st.container():
+
+        st.title("📊 Compostos Bioativos e familias")
+
+        # Exibe a tabela
+        st.dataframe(df_cont_bacte)
+        # Botão de download
+        st.download_button(
+            label="⬇️ Baixar planilha CSV",
+            data=df_cont_bacte.to_csv(index=False).encode('utf-8'),
+            file_name='compostos_bioativos_familias_batecerias.csv',
+            mime='text/csv',
+        )
+
+ # _______________________________________________________________________________________
+    # Supondo que você já tenha o DataFrame df_cont_fam01
+    df_heat = df_cont_fung.set_index(['FUNG', 'Biosafety'])
+    df_heat = df_heat.select_dtypes(include='number')  # Apenas dados numéricos
+
+    # Seleção interativa de quantidade de compostos
+
+    # Seleciona as top_n colunas (compostos) com base na soma total
+    top_columns = df_heat.sum().sort_values(ascending=False).head(top_n).index
+    df_filtered = df_heat[top_columns]
+    # Criação do heatmap com Plotly fam_02
+    zmin = df_filtered.values.min()
+    zmax = np.percentile(df_filtered.values, 95)
+
+    sort_option01 = st.selectbox(
+        "Ordenar bactérias por:",
+        options=["Total de compostos Fungos",
+                 "Low Biosafety", "High Biosafety"]
+    )
+
+    # Lógica para ordenar
+    if sort_option01 == "Total de compostos":
+        df_filtered = df_filtered.loc[df_filtered.sum(
+            axis=1).sort_values(ascending=False).index]
+    elif sort_option01 == "High Biosafety":
+        df_filtered = df_filtered.sort_index(
+            level='Biosafety', ascending=False)
+    elif sort_option01 == "Low Biosafety":
+        df_filtered = df_filtered.sort_index(level='Biosafety', ascending=True)
 
     # Criação do heatmap com Plotly fam01
     fig = go.Figure(data=go.Heatmap(
@@ -1232,12 +1364,12 @@ else:
         st.title("📊 Compostos Bioativos e familias")
 
         # Exibe a tabela
-        st.dataframe(df_cont_bacte)
+        st.dataframe(df_cont_fung)
         # Botão de download
         st.download_button(
             label="⬇️ Baixar planilha CSV",
-            data=df_cont_bacte.to_csv(index=False).encode('utf-8'),
-            file_name='compostos_bioativos_familias.csv',
+            data=df_cont_fung.to_csv(index=False).encode('utf-8'),
+            file_name='compostos_bioativos_familias_fungos.csv',
             mime='text/csv',
         )
 
