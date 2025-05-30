@@ -387,8 +387,13 @@ else:
     # Ajustes
     import pandas as pd
     df_cont_bacte = pd.read_csv('contagem_fam_bio_bacte_gram.csv')
+    df_cont_bacte =  df_cont_bacte.drop(columns=['noise','isolated compounds'])
+
     df_cont_fam01 = pd.read_csv('contagem_fam_bio_ModelosU.csv')
+    df_cont_fam01 =  df_cont_fam01.drop(columns=['noise','isolated compounds'])
+
     df_cont_fung = pd.read_csv('contagem_fam_bio_fung_bios.csv')
+    df_cont_fung =  df_cont_fung.drop(columns=['noise','isolated compounds'])
 
     df_cont_fam01 = df_cont_fam01[df_cont_fam01['family'].notna()]
 
