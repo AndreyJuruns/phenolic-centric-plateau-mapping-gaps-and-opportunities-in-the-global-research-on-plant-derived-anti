@@ -42,40 +42,40 @@ if not st.session_state.logged_in:
         else:
             st.error("Usuário ou senha incorretos.")
 else:
-    st.success(f"Bem-vindo, {st.session_state.username}!")
-
-    # Aqui entra o conteúdo principal da sua aplicação
-    st.write("🎉 Este é o conteúdo da aplicação após login.")
+    st.success(f"Welcome, {st.session_state.username}!")
 
     # Carrega os dados
-    df_banco = pd.read_csv('Banco_Dados_Filtrado01.csv')
+    df_banco = pd.read_csv('Banco_Dados_Filtrado02.csv')
     df_contagem = pd.read_csv('contagem_termos.csv')
     df_countsN = pd.read_csv('contagemN.csv')
     df_countsP = pd.read_csv('contagemP.csv')
 
-    logo_path = 'Lap.jpeg'
+    logo_path = 'Lap.png'
 
     # ----- SIDEBAR -----
     st.sidebar.image(logo_path, width=1000)
-    st.sidebar.title("Análise de Compostos Bioativos")
-    st.sidebar.markdown("---")  # linha divisória
-    st.sidebar.title("Configurações")
+    st.sidebar.markdown(
+        "👨‍🔬 **Researchers:**  \nAndrey Gaspar Sorrilha Rodrigues  \nCarlos Alexandre Carollo")
+    st.sidebar.title("🔬 Bioactive Compounds Analysis")
+    st.sidebar.markdown("---")  # Line divisória
+    st.sidebar.title("⚙️ Settings")
 
     # Seleção de quantidade de termos a mostrar
-    top_n = st.sidebar.slider("Quantidade de compostos (Top N):", 5, 100, 20)
+    top_n = st.sidebar.slider("Number of Compounds (Top N):", 5, 100, 20)
 
     # Seleção de tipo de gráfico principal
     grafico_principal = st.sidebar.radio(
-        "Tipo de gráfico principal:",
-        ("Barra", "Área", "Linha")
+        "Main Chart Type:",
+        ("Bar", "Area", "Line")
     )
 
     with st.container():
 
-        st.title("🌿 Phylogenetic Tree 📈")
-        st.header("Árvore Filogenética dos Compostos Bioativos")
+        st.title(
+            "🌿 Phylogenetic Tree of Tree Species Identified Through Bibliometric Filtering 📈")
+        st.header("🧬 Evolutionary Relationships Among Tree Families")
 
-        image_file = "arvore_com_per.svg"
+        image_file = "Tree_all_species.tiff"
 
         # Opção do usuário
         expand = st.checkbox("🔍 Expand to full width")
@@ -83,14 +83,14 @@ else:
         # Exibição da imagem com largura condicional
         if expand:
             st.image(image_file, width=2000,
-                     caption="Árvore Filogenética dos Compostos Bioativos")
+                     caption="Evolutionary Relationships Among Tree Families")
         else:
             st.image(image_file, width=1000,
-                     caption="Árvore Filogenética dos Compostos Bioativos")
+                     caption="Evolutionary Relationships Among Tree Families")
         # ___________________________________________________________________________
-        st.header("Árvore Filogenética dos Compostos Bioativos 01")
+        st.header("🧬 Botanical Families Associated with Bioactive Compounds")
 
-        image_file = "arvore_completa.svg"
+        image_file = "family_compounds_end.tiff"
 
         # Opção do usuário
         expand01 = st.checkbox("🔍 Expand to full width a")
@@ -98,36 +98,73 @@ else:
         # Exibição da imagem com largura condicional
         if expand01:
             st.image(image_file, width=2000,
-                     caption="Árvore Filogenética dos Compostos Bioativos 01")
+                     caption="Distribution of Compounds by Plant Family with Pharmacological Potential")
         else:
             st.image(image_file, width=1000,
-                     caption="Árvore Filogenética dos Compostos Bioativos 01")
+                     caption="Distribution of Compounds by Plant Family with Pharmacological Potential")
 
         # ___________________________________________________________________________
-        st.header("Árvore Filogenética dos Compostos Bioativos")
-        image_file = "arvore_com_per.svg"
+        st.header(
+            "🧬 Taxonomic Distribution of Microorganisms and Associated Compounds")
+        image_file = "classes.tiff"
 
         # Opção do usuário
-        expand = st.checkbox("🔍 Expand to full width b")
+        expand02 = st.checkbox("🔍 Expand to full width c")
 
         # Exibição da imagem com largura condicional
-        if expand:
+        if expand02:
             st.image(image_file, width=2000,
-                     caption="Árvore Filogenética dos Compostos Bioativos")
+                     caption="Classification of Microorganisms and Relative Frequency of Bioactive Compounds")
         else:
             st.image(image_file, width=1000,
-                     caption="Árvore Filogenética dos Compostos Bioativos")
+                     caption="Classification of Microorganisms and Relative Frequency of Bioactive Compounds")
+
+        # ___________________________________________________________________________
+
+        st.header(
+            "🧬 Taxonomic Distribution of Microorganisms and Associated Compounds")
+        image_file = "bacteria_compounds.tiff"
+
+        # Opção do usuário
+        expand03 = st.checkbox("🔍 Expand to full width d")
+
+        # Exibição da imagem com largura condicional
+        if expand03:
+            st.image(image_file, width=2000,
+                     caption="Profile of Natural Origin Compounds Active Against Selected Bacteria")
+        else:
+            st.image(image_file, width=1000,
+                     caption="Profile of Natural Origin Compounds Active Against Selected Bacteria")
+
+        # ___________________________________________________________________________
+        st.header(
+            "🧬Taxonomic Distribution of Microorganisms and Associated Compounds")
+        image_file = "compounds_fung.tiff"
+
+        # Opção do usuário
+        expand04 = st.checkbox("🔍 Expand to full width e")
+
+        # Exibição da imagem com largura condicional
+        if expand04:
+            st.image(image_file, width=2000,
+                     caption="Diversity of Compounds in Pathogenic and Environmental Fungi")
+        else:
+            st.image(image_file, width=1000,
+                     caption="Diversity of Compounds in Pathogenic and Environmental Fungi")
+
+        # ___________________________________________________________________________
 
     # ----- CONTEÚDO PRINCIPAL -----
     with st.container():
 
-        st.title("📊 TABELA GERAL")
+        st.title(
+            "📊 Integrated Table of Bioactive Compounds and Associated Organisms from Web of Science Data")
 
         # Exibe a tabela
         st.dataframe(df_banco)
         # Botão de download
         st.download_button(
-            label="⬇️ Baixar planilha CSV",
+            label="⬇️ Download CSV Spreadsheet",
             data=df_banco.to_csv(index=False).encode('utf-8'),
             file_name='bancod_de_dados.csv',
             mime='text/csv',
@@ -137,13 +174,17 @@ else:
 
     with st.container():
 
-        st.title("📊 Frequência de Compostos Bioativos")
-
+        st.title("📊 Frequency Distribution of Bioactive Compounds")
+        st.header(
+            "Bioactive Compounds identified in the analyzed bibliometric dataset.")
         # Exibe a tabela
-        st.dataframe(df_contagem)
+        st.dataframe(df_contagem.rename(columns={
+            "Termo": "🧪 Term",
+            "Frequência": "🔢 Frequency"
+        }))
         # Botão de download
         st.download_button(
-            label="⬇️ Baixar planilha CSV",
+            label="⬇️ Download CSV Spreadsheet",
             data=df_contagem.to_csv(index=False).encode('utf-8'),
             file_name='contagem_compostos_bioativos.csv',
             mime='text/csv',
@@ -154,13 +195,13 @@ else:
 
     # Container: gráfico principal
     with st.container():
-        st.subheader(f"Gráfico Principal")
+        st.subheader(f"🔬 Bioactive Compounds: Frequency Overview")
 
-        if grafico_principal == "Área":
+        if grafico_principal == "Area":
             st.area_chart(top_n_data, use_container_width=True)
-        elif grafico_principal == "Linha":
+        elif grafico_principal == "Line":
             st.line_chart(top_n_data, use_container_width=True)
-        elif grafico_principal == "Barra":
+        elif grafico_principal == "Bar":
             st.bar_chart(top_n_data, use_container_width=True)
 
 # ____________________________________________________________________________________
@@ -170,13 +211,17 @@ else:
     # ----- CONTEÚDO PRINCIPAL BACTERIAS -----
     with st.container():
 
-        st.title("📊 Frequência de Bactérias")
-
+        st.title("📊 Frequency Distribution of Bacteria")
+        st.header(
+            "Bacteria species identified in the analyzed bibliometric dataset.")
         # Exibe a tabela
-        st.dataframe(df_contagem_02)
+        st.dataframe(df_contagem_02.rename(columns={
+            "Termo": "🧪 Term",
+            "Frequência": "🔢 Frequency"
+        }))
         # Botão de download
         st.download_button(
-            label="⬇️ Baixar planilha CSV",
+            label="⬇️ Download CSV Spreadsheet",
             data=df_contagem_02.to_csv(index=False).encode('utf-8'),
             file_name='frequência_bactérias_02.csv',
             mime='text/csv',
@@ -187,13 +232,13 @@ else:
 
     # Container: gráfico principal de Bactérias
     with st.container():
-        st.subheader(f"Gráfico Bactérias")
+        st.subheader("🦠 Bacteria: Frequency Overview")
 
-        if grafico_principal == "Área":
+        if grafico_principal == "Area":
             st.area_chart(top_n_data, use_container_width=True)
-        elif grafico_principal == "Linha":
+        elif grafico_principal == "Line":
             st.line_chart(top_n_data, use_container_width=True)
-        elif grafico_principal == "Barra":
+        elif grafico_principal == "Bar":
             st.bar_chart(top_n_data, use_container_width=True)
 # ____________________________________________________________________________________
 # ____________________________________________________________________________________
@@ -203,13 +248,16 @@ else:
     # ----- CONTEÚDO PRINCIPAL FUNGOS -----
     with st.container():
 
-        st.title("📊 Frequência de Fungos")
-
+        st.title("📊 Frequency Distribution of Fungi")
+        st.header("Fungal species identified in the analyzed bibliometric dataset.")
         # Exibe a tabela
-        st.dataframe(df_contagem_03)
+        st.dataframe(df_contagem_03.rename(columns={
+            "Termo": "🧪 Term",
+            "Frequência": "🔢 Frequency"
+        }))
         # Botão de download
         st.download_button(
-            label="⬇️ Baixar planilha CSV",
+            label="⬇️ Download CSV Spreadsheet",
             data=df_contagem_03.to_csv(index=False).encode('utf-8'),
             file_name='frequência_Fungos.csv',
             mime='text/csv',
@@ -220,13 +268,13 @@ else:
 
     # Container: gráfico principal de Fungos
     with st.container():
-        st.subheader(f"Gráfico Fungos")
+        st.subheader("🍄 **Fungi: Frequency Overview**")
 
-        if grafico_principal == "Área":
+        if grafico_principal == "Area":
             st.area_chart(top_n_data, use_container_width=True)
-        elif grafico_principal == "Linha":
+        elif grafico_principal == "Line":
             st.line_chart(top_n_data, use_container_width=True)
-        elif grafico_principal == "Barra":
+        elif grafico_principal == "Bar":
             st.bar_chart(top_n_data, use_container_width=True)
 # ____________________________________________________________________________________
 # ____________________________________________________________________________________
@@ -234,53 +282,56 @@ else:
     df_countsP = df_countsP.head(top_n).set_index('bioactives_grouped')
 
     with st.container():
-        st.subheader("📊 Comparação Lado a Lado")
+        st.title(
+            "📊 Side-by-Side Comparison of Bioactive Compound Frequencies")
+        st.header(
+            "Based on Gram-negative and Gram-positive bacterial targets identified in the bibliometric dataset.")
         col1, col2 = st.columns(2)
         with col1:
-            st.write("🔴 Frequência Gram Negative")
+            st.write("🔴 Gram-Negative Frequency")
 
             # Exibe a tabela
             st.dataframe(df_countsN)
             # Botão de download
             st.download_button(
-                label="⬇️ Baixar planilha CSV",
+                label="⬇️ Download CSV Spreadsheet",
                 data=df_countsN.to_csv(index=False).encode('utf-8'),
                 file_name='frequência_bactérias_neg.csv',
                 mime='text/csv',
             )
         with col2:
-            st.write("🔵 Frequência Gram Positive")
+            st.write("🔵 Gram-Positive Frequency")
 
             # Exibe a tabela
             st.dataframe(df_countsP)
         # Botão de download
             st.download_button(
-                label="⬇️ Baixar planilha CSV",
+                label="⬇️ Download CSV Spreadsheet",
                 data=df_countsP.to_csv(index=False).encode('utf-8'),
                 file_name='frequência_bactérias_pos.csv',
                 mime='text/csv',
             )
 
     with st.container():
-        st.subheader("📊 Comparação Lado a Lado")
+        st.header("📊 Side-by-Side Frequency Overview")
         col1, col2 = st.columns(2)
         with col1:
-            st.write("🔴Gráfico de Negative")
+            st.write("🔴 Gram-Negative Overview")
 
-            if grafico_principal == "Área":
+            if grafico_principal == "Area":
                 st.area_chart(df_countsN, use_container_width=True)
-            elif grafico_principal == "Linha":
+            elif grafico_principal == "Line":
                 st.line_chart(df_countsN, use_container_width=True)
-            elif grafico_principal == "Barra":
+            elif grafico_principal == "Bar":
                 st.bar_chart(df_countsN, use_container_width=True)
         with col2:
-            st.write("🔵 Gráfico de Positive")
+            st.write("🔵 Gram-Positive Overview")
 
-            if grafico_principal == "Área":
+            if grafico_principal == "Area":
                 st.area_chart(df_countsP, use_container_width=True)
-            elif grafico_principal == "Linha":
+            elif grafico_principal == "Line":
                 st.line_chart(df_countsP, use_container_width=True)
-            elif grafico_principal == "Barra":
+            elif grafico_principal == "Bar":
                 st.bar_chart(df_countsP, use_container_width=True)
 
     # Suponha que df_countsN e df_countsP já estejam definidos
@@ -303,16 +354,16 @@ else:
     df_merged['total'] = df_merged['negativo'] + df_merged['positivo']
     df_merged = df_merged.sort_values(by='total', ascending=False)
 
-    # Gráfico de barras lado a lado com Plotly
+    # Gráfico de Bars lado a lado com Plotly
     fig = go.Figure(data=[
-        go.Bar(name='Gram Negative',
+        go.Bar(name='Gram-Negative',
                x=df_merged['termo'], y=df_merged['negativo']),
-        go.Bar(name='Gram Positive',
+        go.Bar(name='Gram-Positive',
                x=df_merged['termo'], y=df_merged['positivo'])
     ])
 
     fig.update_layout(
-        title='📊 Frequência por Termo (Gram + / -)',
+
         xaxis_title='Termo',
         yaxis_title='Frequência',
         barmode='group',
@@ -321,6 +372,7 @@ else:
     )
 
     # Exibe no Streamlit
+    st.title('📊 Frequency by Term (Gram + / -)')
     st.plotly_chart(fig, use_container_width=True)
 
     # Ajustes
@@ -383,7 +435,7 @@ else:
     ))
 
     fig.update_layout(
-        title='Heatmap Interativo dos Compostos Model Unidos',
+
         xaxis_nticks=top_n,
         yaxis_nticks=top_n,
         height=1000
@@ -391,17 +443,20 @@ else:
     )
 
     # Exibe o gráfico no Streamlit
+    st.title('🟩 **Interactive Heatmap of Compounds by Family**')
+    st.subheader(
+        'Taxonomic families vs. bioactive compounds based on bibliometric analysis.')
     st.plotly_chart(fig, use_container_width=True)
 
     with st.container():
 
-        st.title("📊 Compostos Bioativos e familias")
+        st.title("📊 **Bioactive Compounds by Plant Family**")
 
         # Exibe a tabela
         st.dataframe(df_cont_fam01)
         # Botão de download
         st.download_button(
-            label="⬇️ Baixar planilha CSV",
+            label="⬇️ Download CSV Spreadsheet",
             data=df_cont_fam01.to_csv(index=False).encode('utf-8'),
             file_name='compostos_bioativos_familiasNER_Model.csv',
             mime='text/csv',
@@ -420,21 +475,26 @@ else:
     # Criação do heatmap com Plotly fam_02
     zmin = df_filtered_bac.values.min()
     zmax = np.percentile(df_filtered_bac.values, 95)
-
+    st.title('🟩 **Interactive Heatmap of Bioactive Compounds by Bacterial Species**')
+    st.subheader(
+        'Compounds associated with Gram-positive and Gram-negative bacteria based on bibliometric data.')
     sort_option = st.selectbox(
-        "Ordenar bactérias por:",
-        options=["Total de compostos Bacterias",
-                 "Gram positivo primeiro", "Gram negativo primeiro"]
+        "Sort bacteria by:",
+        options=[
+            "Total number of compounds",
+            "Gram-positive first",
+            "Gram-negative first"
+        ]
     )
 
     # Lógica para ordenar
-    if sort_option == "Total de compostos":
+    if sort_option == "Total number of compounds":
         df_filtered_bac = df_filtered_bac.loc[df_filtered_bac.sum(
             axis=1).sort_values(ascending=False).index]
-    elif sort_option == "Gram positivo primeiro":
+    elif sort_option == "Gram-negative first":
         df_filtered_bac = df_filtered_bac.sort_index(
             level='gram', ascending=False)
-    elif sort_option == "Gram negativo primeiro":
+    elif sort_option == "Gram-positive first":
         df_filtered_bac = df_filtered_bac.sort_index(
             level='gram', ascending=True)
 
@@ -456,7 +516,7 @@ else:
     ))
 
     fig.update_layout(
-        title='Heatmap Interativo dos Compostos',
+
         xaxis_nticks=top_n,
         yaxis_nticks=top_n,
         height=1000
@@ -464,17 +524,18 @@ else:
     )
 
     # Exibe o gráfico no Streamlit
+
     st.plotly_chart(fig, use_container_width=True)
 
     with st.container():
 
-        st.title("📊 Compostos Bioativos e familias")
+        st.title("📊 Bioactive Compounds by Bacterial Species")
 
         # Exibe a tabela
         st.dataframe(df_cont_bacte)
         # Botão de download
         st.download_button(
-            label="⬇️ Baixar planilha CSV",
+            label="⬇️ Download CSV Spreadsheet",
             data=df_cont_bacte.to_csv(index=False).encode('utf-8'),
             file_name='compostos_bioativos_familias_batecerias.csv',
             mime='text/csv',
@@ -512,7 +573,7 @@ else:
     ))
 
     fig.update_layout(
-        title='Heatmap Interativo dos Compostos Model Unidos Fungos',
+
         xaxis_nticks=top_n,
         yaxis_nticks=top_n,
         height=1000
@@ -520,17 +581,20 @@ else:
     )
 
     # Exibe o gráfico no Streamlit
+    st.title('🟩 **Interactive Heatmap of Bioactive Compounds by Fungal Species**')
+    st.subheader(
+        'Fungal species and their associated bioactive compounds identified through bibliometric analysis.')
     st.plotly_chart(fig, use_container_width=True)
 
     with st.container():
 
-        st.title("📊 Compostos Bioativos e familias Fungos")
+        st.title("📊 Bioactive Compounds by Bacterial Species")
 
         # Exibe a tabela
         st.dataframe(df_cont_fung)
         # Botão de download
         st.download_button(
-            label="⬇️ Baixar planilha CSV",
+            label="⬇️ Download CSV Spreadsheet",
             data=df_cont_fung.to_csv(index=False).encode('utf-8'),
             file_name='compostos_bioativos_familias_fungos.csv',
             mime='text/csv',
