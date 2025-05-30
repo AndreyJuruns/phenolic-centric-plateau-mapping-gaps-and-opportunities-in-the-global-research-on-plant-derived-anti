@@ -385,15 +385,10 @@ else:
     st.plotly_chart(fig, use_container_width=True)
 
     # Ajustes
-    import pandas as pd
+   
     df_cont_bacte = pd.read_csv('contagem_fam_bio_bacte_gram.csv')
-    df_cont_bacte =  df_cont_bacte.drop(columns=['noise','isolated compounds'])
-
     df_cont_fam01 = pd.read_csv('contagem_fam_bio_ModelosU.csv')
-    df_cont_fam01 =  df_cont_fam01.drop(columns=['noise','isolated compounds'])
-
     df_cont_fung = pd.read_csv('contagem_fam_bio_fung_bios.csv')
-    df_cont_fung =  df_cont_fung.drop(columns=['noise','isolated compounds'])
 
     df_cont_fam01 = df_cont_fam01[df_cont_fam01['family'].notna()]
 
@@ -407,9 +402,9 @@ else:
         include='number').sum(axis=1)
 
     # Remover a coluna 'noise' se existir
-    df_cont_fam01 = df_cont_fam01.drop(columns=['noise'])
-    df_cont_bacte = df_cont_bacte.drop(columns=['noise'])
-    df_cont_fung = df_cont_fung.drop(columns=['noise'])
+    df_cont_fam01 = df_cont_fam01.drop(columns=['noise','isolated compounds'])
+    df_cont_bacte = df_cont_bacte.drop(columns=['noise','isolated compounds'])
+    df_cont_fung = df_cont_fung.drop(columns=['noise','isolated compounds'])
 
     df_cont_fam01 = df_cont_fam01.sort_values(
         by='total_compostos', ascending=False)
