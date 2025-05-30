@@ -49,8 +49,15 @@ else:
     df_contagem = pd.read_csv('contagem_termos.csv')
     df_contagem = df_contagem[(~df_contagem['Termo'].str.contains("noise", regex=False, na=False, case=False)) & (
         ~df_contagem['Termo'].str.contains("isolated compounds", regex=False, na=False, case=False))]
+
     df_countsN = pd.read_csv('contagemN.csv')
+    df_countsN = df_countsN[(~df_countsN['bioactives_grouped'].str.contains("noise", regex=False, na=False, case=False)) & (
+        ~df_countsN['bioactives_grouped'].str.contains("isolated compounds", regex=False, na=False, case=False))]
+
     df_countsP = pd.read_csv('contagemP.csv')
+    df_countsP = df_countsP[(~df_countsP['bioactives_grouped'].str.contains("noise", regex=False, na=False, case=False)) & (
+        ~df_countsP['bioactives_grouped'].str.contains("isolated compounds", regex=False, na=False, case=False))]
+    
 
     logo_path = 'Lap.png'
 
