@@ -47,6 +47,8 @@ else:
     # Carrega os dados
     df_banco = pd.read_csv('Banco_Dados_Filtrado02.csv')
     df_contagem = pd.read_csv('contagem_termos.csv')
+    df_contagem = df_contagem[(~df_contagem['Termo'].str.contains("noise", regex=False, na=False, case=False)) & (
+        ~df_contagem['Termo'].str.contains("isolated compounds", regex=False, na=False, case=False))]
     df_countsN = pd.read_csv('contagemN.csv')
     df_countsP = pd.read_csv('contagemP.csv')
 
