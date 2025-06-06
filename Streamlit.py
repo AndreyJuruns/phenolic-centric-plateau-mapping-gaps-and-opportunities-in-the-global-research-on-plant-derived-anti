@@ -44,8 +44,6 @@ if not st.session_state.logged_in:
         else:
             st.error("Usuário ou senha incorretos.")
 else:
-    st.success(f"Welcome, {st.session_state.username}!")
-    import pandas as pd
     # Carrega os dados
     df_banco = pd.read_csv('Banco_Dados_Filtrado02.csv')
     df_contagem = pd.read_csv('contagem_termos.csv')
