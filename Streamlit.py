@@ -7,6 +7,18 @@ import streamlit as st
 
 # Define layout como wide
 
+agrupamento = {
+    "cartone": 'carotenoids'
+}
+
+
+def substituir_bioativos(texto):
+    if pd.isna(texto):
+        return texto
+    compostos = [x.strip() for x in texto.split(',')]
+    compostos_substituidos = [agrupamento.get(x, x) for x in compostos]
+    return ', '.join(compostos_substituidos)
+
 
 # ✅ Deve ser o primeiro comando Streamlit!
 st.set_page_config(
@@ -44,8 +56,10 @@ if not st.session_state.logged_in:
         else:
             st.error("Usuário ou senha incorretos.")
 else:
+
+    import pandas as pd
     # Carrega os dados
-    df_banco = pd.read_csv('Banco_Dados_Filtrado02.csv')
+    df_banco = pd.read_csv('Banco_Dados_Filtrado04.csv')
     df_contagem = pd.read_csv('contagem_termos.csv')
     df_contagem = df_contagem[(~df_contagem['Termo'].str.contains("noise", regex=False, na=False, case=False)) & (
         ~df_contagem['Termo'].str.contains("isolated compounds", regex=False, na=False, case=False))]
@@ -77,7 +91,9 @@ else:
         "Main Chart Type:",
         ("Bar", "Area", "Line")
     )
+
     st.title("Phenolic-Centric Plateau? Mapping Gaps and Opportunities in the Global Research on Plant-Derived Antimicrobials")
+
     tab1, tab2 = st.tabs(
         ["Graphical and Tabular Data Visualization", "Cartographic Representation"])
     with tab1:
@@ -377,8 +393,8 @@ else:
 
         fig.update_layout(
 
-            xaxis_title='Termo',
-            yaxis_title='Frequência',
+            xaxis_title='Types of Phytochemicals',
+            yaxis_title='Frequency of Occurrence',
             barmode='group',
             xaxis_tickangle=-45,
             height=500
@@ -405,20 +421,19 @@ else:
         df_cont_fam01 = df_cont_fam01[df_cont_fam01['family'].notna()]
 
         # Somar somente as colunas numéricas (os compostos)
-        df_cont_fam01['total_compostos'] = df_cont_fam01.select_dtypes(
+        df_cont_fam01['Total compound count'] = df_cont_fam01.select_dtypes(
             include='number').sum(axis=1)
-
-        df_cont_bacte['total_compostos'] = df_cont_bacte.select_dtypes(
+        df_cont_bacte['Total compound count'] = df_cont_bacte.select_dtypes(
             include='number').sum(axis=1)
-        df_cont_fung['total_compostos'] = df_cont_fung.select_dtypes(
+        df_cont_fung['Total compound count'] = df_cont_fung.select_dtypes(
             include='number').sum(axis=1)
 
         df_cont_fam01 = df_cont_fam01.sort_values(
-            by='total_compostos', ascending=False)
+            by='Total compound count', ascending=False)
         df_cont_bacte = df_cont_bacte.sort_values(
-            by='total_compostos', ascending=False)
+            by='Total compound count', ascending=False)
         df_cont_fung = df_cont_fung.sort_values(
-            by='total_compostos', ascending=False)
+            by='Total compound count', ascending=False)
         # _______________________________________________________________________________________
         # Supondo que você já tenha o DataFrame df_cont_fam01
         df_heat = df_cont_fam01.set_index('family')
