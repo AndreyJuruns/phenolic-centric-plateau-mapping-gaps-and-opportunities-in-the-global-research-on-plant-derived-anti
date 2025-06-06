@@ -11,7 +11,7 @@ import streamlit as st
 # ✅ Deve ser o primeiro comando Streamlit!
 st.set_page_config(
     layout="wide",
-    page_title="Frequência de Compostos Bioativos"
+    page_title="🌿 Phenolic-Centric Plateau? Mapping Gaps and Opportunities in the Global Research on Plant-Derived Antimicrobials 🌿"
 )
 
 # Dicionário com usuários e senhas (em produção, use hashing!)
@@ -81,6 +81,7 @@ else:
     )
     tab1, tab2 = st.tabs(
         ["Graphical and Tabular Data Visualization", "Cartographic Representation"])
+    st.title("Phenolic-Centric Plateau? Mapping Gaps and Opportunities in the Global Research on Plant-Derived Antimicrobials")
     with tab1:
         with st.container():
 
