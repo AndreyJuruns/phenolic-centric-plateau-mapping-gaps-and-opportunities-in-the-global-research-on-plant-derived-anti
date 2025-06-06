@@ -66,7 +66,7 @@ else:
     # ----- SIDEBAR -----
     st.sidebar.image(logo_path, width=1000)
     st.sidebar.markdown(
-        "👨‍🔬 **Researchers:**  \nAndrey Gaspar Sorrilha Rodrigues  \nAline Regina Hellmann Carollo  \nCarlos Alexandre Carollo")
+        "👨‍🔬 **Researchers:**  \nAndrey Gaspar Sorrilha Rodrigues  \nProfº Dra. Aline Regina Hellmann Carollo  \nProfº Dr. Carlos Alexandre Carollo  \nDra. Denise Brentan da Silva")
     st.sidebar.title("🔬 Bioactive Compounds Analysis")
     st.sidebar.markdown("---")  # Line divisória
     st.sidebar.title("⚙️ Settings")
