@@ -83,7 +83,7 @@ else:
     with tab1:
         with st.container():
 
-            st.title(
+            st.header(
                 "🌿 Phylogenetic Tree of Tree Species Identified Through Bibliometric Filtering 📈")
             st.header("🧬 Evolutionary Relationships Among Tree Families")
 
