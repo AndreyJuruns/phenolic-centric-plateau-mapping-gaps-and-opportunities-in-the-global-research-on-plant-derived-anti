@@ -623,7 +623,7 @@ else:
 
         with st.container():
 
-            st.title("📊 Bioactive Compounds by Bacterial Species")
+            st.title("📊 Bioactive Compounds by Fungal Species")
 
             # Exibe a tabela
             st.dataframe(df_cont_fung)
