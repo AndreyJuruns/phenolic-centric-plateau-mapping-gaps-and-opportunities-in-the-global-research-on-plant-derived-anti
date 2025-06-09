@@ -482,6 +482,19 @@ else:
         st.subheader(
             'Taxonomic families vs. bioactive compounds based on bibliometric analysis.')
         st.plotly_chart(fig, use_container_width=True)
+        
+        options_bio_family = st.multiselect(
+            "Select Columns:",
+            df_cont_fam01.columns.tolist(),
+            max_selections=20,
+            accept_new_options=False,
+            default=["family"]
+        )
+
+        if not options_bio_family or options_bio_family == ["family"]:
+            df_cont_fam01 = df_cont_fam01
+        else:
+            df_cont_fam01 = df_cont_fam01.loc[:, options_bio_family]
 
         with st.container():
 
@@ -561,8 +574,19 @@ else:
         )
 
         # Exibe o gráfico no Streamlit
-
         st.plotly_chart(fig, use_container_width=True)
+        options_bio_bacteria = st.multiselect(
+            "Select Columns:",
+            df_cont_bacte.columns.tolist(),
+            max_selections=20,
+            accept_new_options=False,
+            default=["bacteria"]
+        )
+
+        if not options_bio_bacteria or options_bio_bacteria == ["bacteria"]:
+            df_cont_bacte = df_cont_bacte
+        else:
+            df_cont_bacte = df_cont_bacte.loc[:, options_bio_bacteria]
 
         with st.container():
 
@@ -623,6 +647,19 @@ else:
         st.subheader(
             'Fungal species and their associated bioactive compounds identified through bibliometric analysis.')
         st.plotly_chart(fig, use_container_width=True)
+        
+        options_bio_fungal = st.multiselect(
+            "Select Columns:",
+            df_cont_fung.columns.tolist(),
+            max_selections=20,
+            accept_new_options=False,
+            default=["fungi"]
+        )
+
+        if not options_bio_fungal or options_bio_fungal == ["fungi"]:
+            df_cont_fung = df_cont_fung
+        else:
+            df_cont_fung = df_cont_fung.loc[:, options_bio_fungal]
 
         with st.container():
 
