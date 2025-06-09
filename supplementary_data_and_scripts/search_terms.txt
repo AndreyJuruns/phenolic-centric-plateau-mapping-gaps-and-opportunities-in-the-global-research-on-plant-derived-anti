@@ -1,0 +1,48 @@
+ [
+    # --- Compostos com espaço (detectados por regex especial) ---
+    'essential oil',            # essential oil, essential oils
+    'cardiotonic glycoside',    # cardiotonic glycoside(s)
+    'cyanogenic glycoside',     # cyanogenic glycoside(s)
+    'sesquiterpene lacton',  # sesquiterpene lacton(s)
+
+    # --- Flavonoids e derivados ---
+    # flavonoid, isoflavone, neoflavonoid, flavonol, Flavolignans etc.
+    'flav',
+    'anthocyan',      # anthocyanin, anthocyanidin
+    'catechin',       # catechin, epicatechin
+    'chalcon',        # chalcone, dihydrochalcone
+
+    # --- Outras classes principais ---
+    'alkaloid',
+    'tannin',
+    'coumar',         # coumarin, dicoumarol, coumarate
+    'phenylprop',     # phenylpropanoid, phenylpropanoic
+    'saponin',
+    'steroid',
+    'anthraquin',     # anthraquinone, anthraquinones
+    'iridoid',
+    'terpen',         # mono/di/tri/terpenes, terpenoid, sesquiterpene
+    'glycosid',       # glycoside, glycosides
+    'lignan',
+    'phenol',         # phenolic, polyphenol
+    'quinone',        # quinone, benzoquinone, etc.
+    'amine',
+
+    # --- Compostos diversos ---
+    'alkamid',        # alkamide, alkamides
+    'amide',
+    'benzochrom',     # benzochromone, benzochromones
+    'benzofuran',
+    'capsaicin',      # capsaicinoid, capsaicin
+    'caroten',        # carotenoid, carotenes
+    'chromon',        # chromone, chromones
+    'glucosinolat',   # glucosinolate, glucosinolates
+    'kavalacton',     # kavalactone, kavalactones
+    'phenylethan',    # phenylethanoid, phenylethanoids
+    'phenylpyr',      # phenylpyrone, phenylpyrones
+    'phloroglucinol',
+    'polyacetylen',   # polyacetylene, polyacetylenes
+    'proanthocyanid',  # proanthocyanidin, proanthocyanidins
+    'stilben',        # stilbene, stilbenes
+    'xanthon'         # xanthone, xanthones
+]
