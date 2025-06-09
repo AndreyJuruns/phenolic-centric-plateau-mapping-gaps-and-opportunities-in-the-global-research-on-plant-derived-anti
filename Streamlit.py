@@ -577,7 +577,7 @@ else:
 
  # _    ______________________________________________________________________________________
         # Supondo que você já tenha o DataFrame df_cont_fam01
-        df_heat = df_cont_fung.set_index('FUNG')
+        df_heat = df_cont_fung.set_index('fungi')
         df_heat = df_heat.select_dtypes(
             include='number')  # Apenas dados numéricos
 
