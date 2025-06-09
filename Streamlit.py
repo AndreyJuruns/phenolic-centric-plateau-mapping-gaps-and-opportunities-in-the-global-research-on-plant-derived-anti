@@ -409,15 +409,18 @@ else:
         df_cont_bacte = pd.read_csv('contagem_fam_bio_bacte_gram.csv')
         df_cont_bacte = df_cont_bacte.drop(
             columns=['noise', 'isolated compounds'])
-
+        df_cont_bacte = df_cont_bacte.drop([50, 48, 91, 92, 93])
+        
         df_cont_fam01 = pd.read_csv('contagem_fam_bio_ModelosU.csv')
         df_cont_fam01 = df_cont_fam01.drop(
             columns=['noise', 'isolated compounds'])
-
+        df_cont_fam01 = df_cont_fam01.drop([86, 80, 133, 117, 168, 175])
+        
         df_cont_fung = pd.read_csv('contagem_fam_bio_fung_bios.csv')
         df_cont_fung = df_cont_fung.drop(
             columns=['noise', 'isolated compounds'])
-
+        df_cont_fung = df_cont_fung.drop([47, 62, 61])
+        
         df_cont_fam01 = df_cont_fam01[df_cont_fam01['family'].notna()]
 
         # Somar somente as colunas numéricas (os compostos)
